@@ -3,7 +3,7 @@ import sqlite3
 class BotDB:
 
     def __init__(self, db_file):  # initialization bd
-        self.conn = sqlite3.connect(db_file)
+        self.conn = sqlite3.connect(db_file, check_same_thread=False)
         self.cursor = self.conn.cursor()
 
     def user_exists(self, user_id):
@@ -15,11 +15,11 @@ class BotDB:
         return result.fetchone()[0]
 
     def add_user(self, user_id):
-        self.cursor.execute("INSERT INTO 'users' ('user_id') VALUES (?)", (user_id,))
+        self.cursor.execute("INSERT OR IGNORE INTO 'users' ('users_id') VALUES (?)", (user_id,))
         return self.conn.commit()
 
     def add_day(self, join_user_day):
-        self.cursor.execute("INSERT INTO 'users' ('join_date_day') VALUES (?)", (join_user_day,))
+        self.cursor.execute("INSERT OR IGNORE INTO 'users' ('join_date_day') VALUES (?)", (join_user_day,))
         return self.conn.commit()
 
     def get_day(self, join_user_day):
@@ -27,7 +27,7 @@ class BotDB:
         return result.fetchone()[0]
 
     def add_hour(self, join_user_hour):
-        self.cursor.execute("INSERT INTO 'users' ('join_date_hour') VALUES (?)", (join_user_hour,))
+        self.cursor.execute("INSERT OR IGNORE INTO 'users' ('join_date_hour') VALUES (?)", (join_user_hour,))
         return self.conn.commit()
 
     def get_day(self, join_user_hour):
