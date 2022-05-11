@@ -25,10 +25,9 @@ def kick_user(message):
             days_from_start_list.append(datetime.datetime.today().day)
             hours_from_start_list.append(datetime.datetime.today().hour)
 
-            if(not BotDB.user_exists(message.from_user.id)):
-                BotDB.add_user(message.from_user.id)
-                BotDB.add_day(datetime.datetime.today().day)
-                BotDB.add_hour(datetime.datetime.today().hour)
+            BotDB.add_user(message.from_user.id)
+            BotDB.add_day(datetime.datetime.today().day)
+            BotDB.add_hour(datetime.datetime.today().hour)
 
             bot.send_message(my_chat_id, f"Отчет: количество участников - {len(users_id_list)}")
 
