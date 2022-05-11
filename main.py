@@ -2,8 +2,14 @@ import telebot  # import library to work with api telegram
 import datetime  # date and time library
 import config  # bot config
 
+from db import BotDB
+BotDB = BotDB('users_info.db')
+
 users_id_list = []  # list of chat user id`s
 days_from_start_list = []  # list of days on which users entered the chat
+hours_from_start_list = []
+
+my_chat_id = 458950235
 
 bot = telebot.TeleBot(config.TOKEN)
 
@@ -17,6 +23,14 @@ def kick_user(message):
         if (len(days_from_start_list) <= len(users_id_list) or len(users_id_list) == 0):  # day is recorded only 1 time
             users_id_list.append(message.from_user.id)
             days_from_start_list.append(datetime.datetime.today().day)
+            hours_from_start_list.append(datetime.datetime.today().hour)
+
+            if(not BotDB.user_exists(message.from_user.id)):
+                BotDB.add_user(message.from_user.id)
+                BotDB.add_day(datetime.datetime.today().day)
+                BotDB.add_hour(datetime.datetime.today().hour)
+
+            bot.send_message(my_chat_id, f"Отчет: количество участников - {len(users_id_list)}")
 
     if message.author_signature != 'admin':
         for i in range(0, len(users_id_list)):  # loop in which identical id's are removed
