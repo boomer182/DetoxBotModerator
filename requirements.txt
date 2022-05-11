@@ -1,3 +1,2 @@
 pyTelegramBotAPI
 datetime
-sqlite3
