@@ -3,19 +3,27 @@ import psycopg2
 class BotDB:
 
     def __init__(self, db_uri):  # initialization bd
-        self.conn = psycopg2.connect(db_uri)
+        self.conn = psycopg2.connect(db_uri, sslmode="require")
         self.cursor = self.conn.cursor()
 
     # def user_exists(self, user_id):
     #     result = self.cursor.execute("SELECT 'id' FROM 'users' WHERE 'users_id' = ?", (user_id,))
     #     return bool(len(result.fetchall()))
 
+    # def get_users_ids(self):
+    #     result = self.cursor.execute("SELECT user_id FROM users")
+    #     return result.fetchall()
+
     # def get_user_id(self, user_id):  # get a user info
-    #     result = self.cursor.execute("SELECT 'id' FROM 'users' WHERE 'users_id' = ?", (user_id,))
-    #     return result.fetchone()[0]
+    #     result = self.cursor.execute(f"SELECT user_id FROM users WHERE user_id = {user_id}")
+    #     return result.fetchone()
 
     def add_data(self, user_id, join_user_day):  # add user id and join day to bd
         self.cursor.execute("INSERT INTO users(user_id, join_data_day) VALUES (%s, %s)", (user_id, join_user_day))
+        return self.conn.commit()
+
+    def delete_data(self):
+        self.cursor.execute("DELETE from users")
         return self.conn.commit()
 
     # def get_day(self, join_user_day):  # get a join day info
