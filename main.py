@@ -43,7 +43,7 @@ def kick_user(message):
 
     bot.send_message(458950235, f"Отчет: количество участников - {bot.get_chat_member_count(message.chat.id)}")
 
-    if bot.get_chat_member_count(message.chat.id) < 4:
+    if bot.get_chat_member_count(message.chat.id) <= 2:
         BotDB.delete_data()
         bot.send_message(message.chat.id, 'Пользователи успешно удалены!')
 
