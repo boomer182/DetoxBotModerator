@@ -10,28 +10,16 @@ class BotDB:
         result = self.cursor.execute("SELECT 'id' FROM 'users' WHERE 'users_id' = ?", (user_id,))
         return bool(len(result.fetchall()))
 
-    def get_user_id(self, user_id):
+    def get_user_id(self, user_id):  # get a user info
         result = self.cursor.execute("SELECT 'id' FROM 'users' WHERE 'users_id' = ?", (user_id,))
         return result.fetchone()[0]
 
-    def add_user(self, user_id):
-        self.cursor.execute("INSERT OR IGNORE INTO 'users' ('users_id') VALUES (?)", (user_id,))
+    def add_data(self, user_id, join_user_day):  # add user id and join day to bd
+        self.cursor.execute("INSERT INTO 'users' (users_id, join_date_day) VALUES (?, ?)", (user_id, join_user_day))
         return self.conn.commit()
 
-    def add_day(self, join_user_day):
-        self.cursor.execute("INSERT OR IGNORE INTO 'users' ('join_date_day') VALUES (?)", (join_user_day,))
-        return self.conn.commit()
-
-    def get_day(self, join_user_day):
+    def get_day(self, join_user_day):  # get a join day info
         result = self.cursor.execute("SELECT 'id' FROM 'users' WHERE 'join_date_day' = ?", (join_user_day,))
-        return result.fetchone()[0]
-
-    def add_hour(self, join_user_hour):
-        self.cursor.execute("INSERT OR IGNORE INTO 'users' ('join_date_hour') VALUES (?)", (join_user_hour,))
-        return self.conn.commit()
-
-    def get_day(self, join_user_hour):
-        result = self.cursor.execute("SELECT 'id' FROM 'users' WHERE 'join_date_hour' = ?", (join_user_hour,))
         return result.fetchone()[0]
 
     def close(self):  # close bd
