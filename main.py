@@ -28,8 +28,6 @@ def get_data(message):
         if not result:
             BotDB.add_data(id, datetime.datetime.today().day)
 
-        bot.send_message(458950235, f"Отчет: количество участников - {len(users_id_list)}")
-
 @bot.message_handler(content_types=['text', 'photo', 'video'])
 def kick_user(message):
     BotDB.cursor.execute("SELECT join_data_day FROM users")
@@ -42,6 +40,8 @@ def kick_user(message):
         j = 0
         if (datetime.datetime.today().day - result_day[i][j] >= 7):
             bot.ban_chat_member(message.chat.id, result_id[i])
+
+    bot.send_message(458950235, f"Отчет: количество участников - {bot.get_chat_member_count(message.chat.id)}")
 
     if bot.get_chat_member_count(message.chat.id) < 4:
         BotDB.delete_data()
