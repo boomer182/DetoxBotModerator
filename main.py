@@ -1,14 +1,17 @@
 import telebot  # import library to work with api telegram
 import datetime  # date and time library
-import config  # bot config
+from config import * # bot config
 
 from db import BotDB
-BotDB = BotDB('users_info.db')  # connect with bd to the project
+BotDB = BotDB(DB_URI)  # connect with bd to the project
+
+# db_connection = psycopg2.connect(DB_URI, sslmode="require")
+# db_object = db_connection.cursor()
 
 users_id_list = []  # list of chat user id`s
 days_from_start_list = []  # list of days on which users entered the chat
 
-bot = telebot.TeleBot(config.TOKEN)
+bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler(commands=['start'])  # bot is on or off
 def is_bot_working(message):
@@ -21,7 +24,7 @@ def kick_user(message):
             users_id_list.append(message.from_user.id)
             days_from_start_list.append(datetime.datetime.today().day)
 
-            BotDB.add_data(message.from_user.id, datetime.datetime.today().day)  # add user id and join day to bd
+            BotDB.add_data(message.from_user.id, datetime.datetime.today().day) # add user id and join day to bd
 
             bot.send_message(458950235, f"Отчет: количество участников - {len(users_id_list)}")
 
