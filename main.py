@@ -24,7 +24,7 @@ def get_data(message):
         result = BotDB.cursor.fetchone()
 
         if not result:
-            BotDB.add_data(id, datetime.datetime.today().minute)
+            BotDB.add_data(id, datetime.datetime.today().day)
 
 @bot.message_handler(content_types=['text', 'photo', 'video'])
 def kick_user(message):
@@ -36,7 +36,7 @@ def kick_user(message):
 
     for i in range(0, len(result_day)):
         j = 0
-        if (datetime.datetime.today().minute - result_day[i][j] >= 1):
+        if (datetime.datetime.today().day - result_day[i][j] >= 7):
             bot.ban_chat_member(message.chat.id, result_id[i])
             BotDB.cursor.execute(f"DELETE from users user_id WHERE user_id = {result_id[i][j]}")
             BotDB.conn.commit()
