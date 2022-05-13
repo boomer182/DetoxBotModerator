@@ -8,8 +8,6 @@ BotDB = BotDB(DB_URI)  # connect with bd to the project
 
 bot = telebot.TeleBot(TOKEN)
 
-chat_id = -1001780597173  # id of chat detox
-
 users_id_list = []
 
 @bot.message_handler(commands=['start'])  # bot is on or off
@@ -40,10 +38,12 @@ def kick_user(message):
         j = 0
         if (datetime.datetime.today().day - result_day[i][j] >= 7):
             bot.ban_chat_member(message.chat.id, result_id[i])
+            # BotDB.cursor.execute(f"DELETE from users user_id, join_data_day WHERE user_id == {result_id[i]} join_data_day == {result_day[i]}")
+            # BotDB.conn.commit()
 
     bot.send_message(458950235, f"Отчет: количество участников - {bot.get_chat_member_count(message.chat.id)}")
 
-    if bot.get_chat_member_count(message.chat.id) <= 2:
+    if bot.get_chat_member_count(message.chat.id) <= 3:
         BotDB.delete_data()
         bot.send_message(message.chat.id, 'Пользователи успешно удалены!')
 
