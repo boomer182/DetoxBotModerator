@@ -24,7 +24,7 @@ def get_data(message):
         result = BotDB.cursor.fetchone()
 
         if not result:
-            BotDB.add_data(id, datetime.datetime.today().day)
+            BotDB.add_data(id, datetime.datetime.today().minute)
 
 @bot.message_handler(content_types=['text', 'photo', 'video'])
 def kick_user(message):
@@ -36,15 +36,16 @@ def kick_user(message):
 
     for i in range(0, len(result_day)):
         j = 0
-        if (datetime.datetime.today().day - result_day[i][j] >= 7):
+        if (datetime.datetime.today().minute - result_day[i][j] >= 1):
             bot.ban_chat_member(message.chat.id, result_id[i])
-            # BotDB.cursor.execute(f"DELETE from users user_id, join_data_day WHERE user_id == {result_id[i]} join_data_day == {result_day[i]}")
-            # BotDB.conn.commit()
+            BotDB.cursor.execute(f"DELETE from users user_id WHERE user_id = {result_id[i][j]}")
+            BotDB.conn.commit()
+            BotDB.cursor.execute(f"DELETE from users join_data_day WHERE user_id = {result_day[i][j]}")
+            BotDB.conn.commit()
 
     bot.send_message(458950235, f"Отчет: количество участников - {bot.get_chat_member_count(message.chat.id)}")
 
     if bot.get_chat_member_count(message.chat.id) <= 3:
-        BotDB.delete_data()
         bot.send_message(message.chat.id, 'Пользователи успешно удалены!')
 
 bot.polling(none_stop=True)  # the bot is running continuously
