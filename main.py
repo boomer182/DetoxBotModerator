@@ -26,7 +26,7 @@ def get_data(message):
         if not result:
             BotDB.add_data(id, datetime.datetime.today().day)
 
-@bot.message_handler(content_types=['text', 'photo', 'video'])
+@bot.message_handler(content_types=['text'])
 def kick_user(message):
     BotDB.cursor.execute("SELECT join_data_day FROM users")
     result_day = BotDB.cursor.fetchall()
